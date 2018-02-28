@@ -1,5 +1,5 @@
 IMAGE_NAME = newrelic-demo
-DEPENDENCIES = build
+TAG := $(shell cat ${version_file})
 
 COMMONENVVAR = GOOS=$(shell uname -s | tr A-Z a-z) GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m)))
 BUILDENVVAR = CGO_ENABLED=0
@@ -15,4 +15,9 @@ deps:
 build:
 	$(COMMONENVVAR) $(BUILDENVVAR) go build -o main *.go
 
-.PHONY: all deps test build
+push:
+	docker build -t hweicdl/$(IMAGE_NAME):$(TAG)
+	docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+	docker push hweicdl/$(IMAGE_NAME):$(TAG)
+
+.PHONY: all deps test build push

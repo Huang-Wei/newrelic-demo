@@ -36,10 +36,20 @@ func (h helloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if path == "like" {
 		h.popularity.Lock()
 		h.popularity.value += 1
+		h.app.RecordCustomEvent("newrelic_demo_popularity", map[string]interface{}{
+			"namespace": mustGetEnv("NAMESPACE"),
+			"cluster":   mustGetEnv("CLUSTER"),
+			"value":     h.popularity.value,
+		})
 		h.popularity.Unlock()
 	} else if path == "dislike" {
 		h.popularity.Lock()
 		h.popularity.value -= 1
+		h.app.RecordCustomEvent("newrelic_demo_popularity", map[string]interface{}{
+			"namespace": mustGetEnv("NAMESPACE"),
+			"cluster":   mustGetEnv("CLUSTER"),
+			"value":     h.popularity.value,
+		})
 		h.popularity.Unlock()
 	}
 
@@ -47,9 +57,13 @@ func (h helloHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// cfg := newrelic.NewConfig("rewrelic-demo", mustGetEnv("NEW_RELIC_LICENSE_KEY"))
-	cfg := newrelic.NewConfig("rewrelic-demo", "")
-	cfg.Enabled = false // for debugging
+	// for production
+	cfg := newrelic.NewConfig("rewrelic-demo", mustGetEnv("NEW_RELIC_LICENSE_KEY"))
+
+	// for debugging
+	// cfg := newrelic.NewConfig("rewrelic-demo", "")
+	// cfg.Enabled = false // for debugging
+
 	cfg.Logger = newrelic.NewDebugLogger(os.Stdout)
 	app, err := newrelic.NewApplication(cfg)
 	if err != nil {
