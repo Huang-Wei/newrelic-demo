@@ -1,0 +1,38 @@
+# apiVersion: extensions/v1beta1 # for 1.7-
+apiVersion: apps/v1beta2 # for 1.8+
+kind: Deployment
+metadata:
+  name: newrelic-demo
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: newrelic-demo
+  template:
+    metadata:
+      labels:
+        app: newrelic-demo
+    spec:
+      containers:
+      - name: newrelic-demo
+        image: hweicdl/newrelic-demo:v0.0.1
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CLUSTER
+          value: wei-armada
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: newrelic-secret
+              key: NEW_RELIC_LICENSE_KEY
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory:  50Mi
