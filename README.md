@@ -1,5 +1,7 @@
 # newrelic-demo
 
+[![Build Status](https://travis-ci.org/Huang-Wei/newrelic-demo.svg?branch=master)](https://travis-ci.org/Huang-Wei/newrelic-demo)
+
 This is a demo trying to showcase how to use expose prometheus-like metric/event using newrelic API.
 
 ## Running locally

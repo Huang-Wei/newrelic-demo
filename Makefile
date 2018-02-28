@@ -1,5 +1,5 @@
 IMAGE_NAME = newrelic-demo
-TAG := $(shell cat ${version_file})
+TAG := $(shell cat VERSION)
 
 COMMONENVVAR = GOOS=$(shell uname -s | tr A-Z a-z) GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m)))
 BUILDENVVAR = CGO_ENABLED=0
