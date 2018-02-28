@@ -1,0 +1,4 @@
+package: github.com/Huang-Wei
+import:
+- package: github.com/newrelic/go-agent
+  version: v1.11.0
