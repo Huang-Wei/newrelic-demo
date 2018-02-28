@@ -16,7 +16,7 @@ build:
 	$(COMMONENVVAR) $(BUILDENVVAR) go build -o main *.go
 
 push:
-	docker build -t hweicdl/$(IMAGE_NAME):$(TAG)
+	docker build -t hweicdl/$(IMAGE_NAME):$(TAG) .
 	docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
 	docker push hweicdl/$(IMAGE_NAME):$(TAG)
 
